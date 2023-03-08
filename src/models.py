@@ -46,8 +46,7 @@ class CohereModelWrapper(Model):
 
     @staticmethod
     def _get_api_key():
-        with open(os.path.join(os.getcwd(), "static/cohere_api_key.txt")) as infile:
-            key = infile.read()
+        key = os.getenv("COHERE_API_KEY")
         return key
 
     def _get_lm_score(self, input_text):
@@ -102,6 +101,7 @@ class OpenAIModel(Model):
         "textbabbage001": "text-babbage-001",
         "textcurie001": "text-curie-001",
         "textada001": "text-ada-001",
+        "codedavinci002": "code-davinci-002",
     }
 
     def __init__(self, model_engine: str, rate_limit=False):
@@ -152,10 +152,8 @@ class OpenAIModel(Model):
 
     @staticmethod
     def _set_api_key():
-        with open(os.path.join(os.getcwd(), "static/openai_api_key.txt")) as infile:
-            key = infile.readlines()
-            openai.organization = key[0].replace("\n", "")
-            openai.api_key = key[1].replace("\n", "")
+        key = os.getenv("OPENAI_API_KEY")
+        openai.api_key = key
         return key
 
     def to(self, device):
